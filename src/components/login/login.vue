@@ -52,7 +52,7 @@ export default {
                 2、跳转首页
              */
             this.$message.success(msg);
-            // this.$router.push({name: 'home'})
+            this.$router.push({name: 'home'})
           } else {
             /*
               登陆不成功
