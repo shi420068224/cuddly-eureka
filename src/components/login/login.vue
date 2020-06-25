@@ -34,36 +34,45 @@ export default {
   methods: {
     //登录请求
 
-    handleLogin() {
+    async handleLogin() {
+      // 希望 让异步操作的代码，看起来像同步代码
+      // ES7 新特性 -> async + await
+      // 1、 找到异步操作有结果的代码， 在当前代码前加 await,同时接受异步操作的结果
+      // 2、  找到距离异步操作有结果的代码最近的方法，前面加 async
+
+      const res = await this.$http.post("login", this.formdata);
+      const {
+        data,
+        meta: { msg, status }
+      } = res.data;
+
+      if (status === 200) {
+        this.$message.success(msg);
+        this.$router.push({ name: "home" });
+      } else {
+        this.$message.error(msg);
+      }
+
+      /*
       this.$http
         .post("login", this.formdata)
         .then(res => {
-          console.log(res);
-
           const {
             data,
             meta: { msg, status }
           } = res.data;
 
           if (status === 200) {
-            /*
-              登陆成功
-                1、提示登录成功
-                2、跳转首页
-             */
             this.$message.success(msg);
             this.$router.push({name: 'home'})
           } else {
-            /*
-              登陆不成功
-                1、不成功提示
-            */
             this.$message.error(msg);
           }
         })
         .catch(err => {
           console.error(err);
         });
+      */
     }
   }
 };
