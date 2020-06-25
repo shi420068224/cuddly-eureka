@@ -39,8 +39,9 @@ export default {
       // ES7 新特性 -> async + await
       // 1、 找到异步操作有结果的代码， 在当前代码前加 await,同时接受异步操作的结果
       // 2、  找到距离异步操作有结果的代码最近的方法，前面加 async
-
       const res = await this.$http.post("login", this.formdata);
+      console.log(res);
+
       const {
         data,
         meta: { msg, status }
@@ -48,6 +49,8 @@ export default {
 
       if (status === 200) {
         this.$message.success(msg);
+        // 存储 token 值
+        localStorage.setItem('token', data.token)
         this.$router.push({ name: "home" });
       } else {
         this.$message.error(msg);
