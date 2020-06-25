@@ -97,7 +97,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+//  获取tokan
+// if token 有 -> 继续渲染组件
+// token 没有 -> 登录
+
+beforeCreate () {
+  const token = localStorage.getItem('token')
+  if(!token){
+    this.$router.push({name:'login'})
+  }
+}
+};
 </script>
 
 <style>
