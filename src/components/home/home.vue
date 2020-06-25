@@ -9,7 +9,7 @@
         <el-col :span="14"><h3>电商系统</h3></el-col>
         <el-col :span="2"
           ><div class="grid-content bg-purple">
-            <a href="#">退出</a>
+            <a href="#" @click.prevent="handleSignout()">退出</a>
           </div></el-col
         >
       </el-row>
@@ -98,16 +98,26 @@
 
 <script>
 export default {
-//  获取tokan
-// if token 有 -> 继续渲染组件
-// token 没有 -> 登录
+  //  获取tokan
+  // if token 有 -> 继续渲染组件
+  // token 没有 -> 登录
 
-beforeCreate () {
-  const token = localStorage.getItem('token')
-  if(!token){
-    this.$router.push({name:'login'})
+  beforeCreate() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      this.$router.push({ name: "login" });
+    }
+  },
+  methods: {
+    handleSignout(){
+      // 1.清除token
+      // 2.提示
+      // 3.来到login组件
+      localStorage.clear()
+      this.$message.success('退出成功')
+      this.$router.push({name:'login'})
+    }
   }
-}
 };
 </script>
 
