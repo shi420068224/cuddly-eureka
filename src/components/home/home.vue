@@ -2,11 +2,11 @@
   <el-container>
     <el-header>
       <el-row>
-        <el-col :span="8"
+        <el-col :span="2"
           ><div class="grid-content bg-purple">
             <img src="../../assets/logo.png" alt="无法显示图片" /></div
         ></el-col>
-        <el-col :span="14"><h3>电商系统</h3></el-col>
+        <el-col :span="20"><h3>电商系统</h3></el-col>
         <el-col :span="2"
           ><div class="grid-content bg-purple">
             <a href="#" @click.prevent="handleSignout()">退出</a>
@@ -19,6 +19,7 @@
         <!-- 侧边栏 -->
         <el-menu
           :unique-opened="true"
+          :router="true"
           background-color="#304156"
           text-color="#FFF"
         >
@@ -28,7 +29,7 @@
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="users">
               <i class="el-icon-menu"></i>
               <span>用户列表</span>
             </el-menu-item>
@@ -91,7 +92,9 @@
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -109,13 +112,13 @@ export default {
     }
   },
   methods: {
-    handleSignout(){
+    handleSignout() {
       // 1.清除token
       // 2.提示
       // 3.来到login组件
-      localStorage.clear()
-      this.$message.success('退出成功')
-      this.$router.push({name:'login'})
+      localStorage.clear();
+      this.$message.success("退出成功");
+      this.$router.push({ name: "login" });
     }
   }
 };
@@ -157,8 +160,6 @@ export default {
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 
 body > .el-container {
