@@ -14,7 +14,7 @@
         >
       </el-row>
     </el-header>
-    <el-container>
+    <el-container style="height:calc(100% - 60px);">
       <el-aside width="200px">
         <!-- 侧边栏 -->
         <el-menu
@@ -40,7 +40,7 @@
               <i class="el-icon-location"></i>
               <span>权限管理</span>
             </template>
-            <el-menu-item index="2-1">
+            <el-menu-item index="roles">
               <i class="el-icon-location"></i>
               <span>角色列表</span>
             </el-menu-item>
@@ -155,11 +155,13 @@ export default {
   color: rgb(64, 158, 255);
   text-align: left;
   line-height: 200px;
+  /* height: calc(100% - 60px); */
 }
 
 .el-main {
   background-color: #e9eef3;
   color: #333;
+  /* height: calc(100% - 60px); */
 }
 
 body > .el-container {
