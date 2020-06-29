@@ -231,8 +231,9 @@ export default {
       // pagesize 每页显示条数
 
       // 需要授权的 API ，必须在请求头中使用 Authorization 字段提供 token 令牌
-      const AUTH_TOKEN = localStorage.getItem("token");
-      this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+      //const AUTH_TOKEN = localStorage.getItem("token");
+      //this.$http.defaults.headers.common["Authorization"] = AUTH_TOKEN;
+      // token 在 axios 配置文件中设置拦截器统一处理
 
       const res = await this.$http.get(
         `users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`
