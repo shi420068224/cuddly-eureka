@@ -5,14 +5,16 @@
 
     <el-row style="margin-top: 20px;">
       <el-col :span="6">
-        <el-button type="primary" plain>添加角色</el-button>
+        <el-button type="primary" plain @click="showAddRoleDia()"
+          >添加角色</el-button
+        >
       </el-col>
     </el-row>
 
     <!-- 表格 -->
     <el-table :data="roleslist" style="width: 100%">
       <el-table-column width="60" type="expand">
-        <!-- 展开的字表 -->
+        <!-- 展开的子表 -->
         <template slot-scope="scope">
           <!-- scope.row.children -->
           <el-row
@@ -76,7 +78,7 @@
             type="primary"
             icon="el-icon-edit"
             circle
-            @click="showEditUserDia(scope.row)"
+            @click="showEditRoleDia(scope.row)"
           ></el-button>
           <el-button
             size="mini"
@@ -84,7 +86,7 @@
             type="danger"
             icon="el-icon-delete"
             circle
-            @click="showDeleUserMsgBox(scope.row.id)"
+            @click="deleRowRole(scope.row.id)"
           ></el-button>
           <el-button
             size="mini"
@@ -98,7 +100,7 @@
       </el-table-column>
     </el-table>
     <!-- 对话框 -->
-    <!-- 添加用户 -->
+    <!-- 分配权限 -->
     <el-dialog title="分配权限" :visible.sync="dialogFormVisibleRight">
       <!-- 树形结构 -->
       <!--
@@ -120,6 +122,36 @@
         <el-button type="primary" @click="setRoleRight()">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 添加角色 -->
+    <el-dialog title="添加角色" :visible.sync="dialogFormVisibleAddRole">
+      <el-form :model="roleform">
+        <el-form-item label="角色名称" label-width="100px">
+          <el-input v-model="roleform.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" label-width="100px">
+          <el-input v-model="roleform.roleDesc" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleAddRole = false">取 消</el-button>
+        <el-button type="primary" @click="setAddRoles()">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!-- 编辑角色 -->
+    <el-dialog title="编辑角色" :visible.sync="dialogFormVisibleEditRole">
+      <el-form :model="roleform">
+        <el-form-item label="角色名称" label-width="100px">
+          <el-input v-model="roleform.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" label-width="100px">
+          <el-input v-model="roleform.roleDesc" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisibleEditRole = false">取 消</el-button>
+        <el-button type="primary" @click="editRoles()">确 定</el-button>
+      </div>
+    </el-dialog>
   </el-card>
 </template>
 
@@ -135,6 +167,9 @@ export default {
       },
       arrcheck: [],
       dialogFormVisibleRight: false,
+      dialogFormVisibleAddRole: false,
+      dialogFormVisibleEditRole: false,
+      roleform: {},
       currRoleId: -1
     };
   },
@@ -214,7 +249,7 @@ export default {
       let arr2 = this.$refs.tree.getHalfCheckedKeys();
       let arr = [...arr1, ...arr2];
       console.log(arr.join(","));
-      const res = await this.$http.post(`roles/${(this.currRoleId)}/rights`, {
+      const res = await this.$http.post(`roles/${this.currRoleId}/rights`, {
         rids: arr.join(",")
       });
       console.log(res);
@@ -222,7 +257,49 @@ export default {
       this.getRoleList();
       // 关闭对话框
       this.dialogFormVisibleRight = false;
-
+    },
+    //编辑角色
+    //显示
+    showEditRoleDia(role) {
+      console.log(role);
+      this.roleform = role;
+      this.dialogFormVisibleEditRole = true;
+    },
+    //提交
+    async editRoles() {
+      const res = await this.$http.put(
+        `roles/${this.roleform.id}`,
+        this.roleform
+      );
+      console.log(res);
+      if (res.data.meta.status === 200) {
+        this.getRoleList();
+        this.dialogFormVisibleEditRole = false;
+        this.roleform = {};
+      }
+    },
+    // 添加角色
+    // 显示
+    showAddRoleDia() {
+      this.roleform = {};
+      this.dialogFormVisibleAddRole = true;
+    },
+    //提交
+    async setAddRoles() {
+      const res = await this.$http.post(`roles`, this.roleform);
+      if (res.data.meta.status === 201) {
+        this.getRoleList();
+        this.$message.success(res.data.meta.msg);
+        this.dialogFormVisibleAddRole = false;
+      }
+    },
+    //删除当前行角色
+    async deleRowRole(roleId){
+      const res = await this.$http.delete(`roles/${roleId}`)
+      if(res.data.meta.status === 200){
+        this.getRoleList()
+        this.$message.success(res.data.meta.msg)
+      }
     }
   },
   mounted() {
