@@ -2,11 +2,19 @@
   <el-container>
     <el-header>
       <el-row>
-        <el-col :span="2"
+        <el-col :span="12"
           ><div class="grid-content bg-purple">
-            <img src="../../assets/logo.png" alt="无法显示图片" /></div
-        ></el-col>
-        <el-col :span="20"><h3>电商系统</h3></el-col>
+            <img src="../../assets/logo.png" alt="无法显示图片" />
+          </div>
+          <h3>电商系统</h3>
+        </el-col>
+        <el-col :span="10"
+          ><div class="grid-content bg-purple">
+            <span>{{ timeStr | formatWeek }}</span>
+            <span>{{ timeStr | formatDate }}</span>
+            <div style="clear:both;"></div>
+          </div></el-col
+        >
         <el-col :span="2"
           ><div class="grid-content bg-purple">
             <a href="#" @click.prevent="handleSignout()">退出</a>
@@ -25,7 +33,7 @@
         >
           <!-- 1 -->
           <el-submenu
-            :index="''+item1.order"
+            :index="'' + item1.order"
             v-for="(item1, index) in menus"
             :key="index"
           >
@@ -52,13 +60,15 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   //  获取tokan
   // if token 有 -> 继续渲染组件
   // token 没有 -> 登录
   data() {
     return {
-      menus: []
+      menus: [],
+      timeStr: new Date()
     };
   },
   beforeCreate() {
@@ -69,9 +79,34 @@ export default {
     // 判断 token 的导航守卫/路由守卫 在router.js 新增
   },
   created() {
+    this.dataShow();
     this.getMenus();
   },
+  filters: {
+    formatDate(v) {
+      return moment(v).format("YYYY年MM月DD日 HH:mm:ss");
+    },
+    formatWeek(v) {
+      const weekday = [
+        "星期日",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六"
+      ];
+      const week = moment(v).format("E");
+      return weekday[week];
+    }
+  },
   methods: {
+    dataShow() {
+      const _this = this;
+      this.timer = setInterval(() => {
+        _this.timeStr = new Date();
+      }, 1000);
+    },
     async getMenus() {
       const res = await this.$http.get(`menus`);
       console.log(res);
@@ -91,6 +126,9 @@ export default {
       localStorage.clear();
       this.$message.success("退出成功");
       this.$router.push({ name: "login" });
+    },
+    beforeDestroy() {
+      clearInterval(this.timer);
     }
   }
 };
@@ -116,6 +154,13 @@ export default {
 
 .el-header h3 {
   line-height: 60px;
+  text-align: left;
+}
+
+.el-header span {
+  float: right;
+  margin: 0px 5px;
+  color: cornflowerblue;
 }
 
 .el-header a {

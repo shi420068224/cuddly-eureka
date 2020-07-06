@@ -12,6 +12,8 @@ import Home from '@/components/home/home'
 import Users from '@/components/users/users'
 import Right from '@/components/rights/right'
 import Roles from '@/components/rights/roles'
+import Goods from '@/components/goods/goodslist'
+import GoodsAdd from '@/components/goods/goodsadd'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -44,6 +46,16 @@ const router = new Router({
           path: '/rights',
           name: 'rights',
           component: Right
+        },
+        {
+          path: '/goods',
+          name: 'goods',
+          component: Goods
+        },
+        {
+          path: '/goodsadd',
+          name: 'goodsadd',
+          component: GoodsAdd
         }
       ]
     }
