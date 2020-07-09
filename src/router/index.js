@@ -16,6 +16,7 @@ import Goods from '@/components/goods/goodslist'
 import GoodsAdd from '@/components/goods/goodsadd'
 import CateParams from '@/components/goods/cateparams'
 import GoodsCate from '@/components/goods/goodscate'
+import Orders from '@/components/order/orders'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -68,6 +69,11 @@ const router = new Router({
           path: '/categories',
           name: 'categories',
           component: GoodsCate
+        },
+        {
+          path: '/orders',
+          name: 'orders',
+          component: Orders
         }
       ]
     }
